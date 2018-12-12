@@ -8,7 +8,7 @@ const auth = deps => {
             return new Promise((resolve, reject) => {
                 connect.query('SELECT id, email FROM user WHERE email = ? AND password = ?', [email, sha1(password)], (error, results) => {
                     if (error || !results.length) {
-                        errorHandler(error, 'Falha ao localizar o usuários.', reject);
+                        errorHandler(error, 'user not found.', reject);
                         return false;
                     };
                     const { email, id } = results[0];

@@ -5,13 +5,13 @@ const authGuard = (deps) => {
         if (!deps.exclusions.includes(req.href())) {
             const token = req.headers['x-access-token'];
             if (!token) {
-                res.send(403, { error: 'Token não fornecido.' });
+                res.send(403, { error: 'token not provided.' });
                 return false;
             }
             try {
                 req.decoded = jwt.verify(token, process.env.JWT_secret);
             } catch (error) {
-                res.send(403, { error: 'Token inválido.' });
+                res.send(403, { error: 'invalid token.' });
                 return false;
             }
         }

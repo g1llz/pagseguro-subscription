@@ -24,11 +24,11 @@ const subscription = deps => {
                 request(options)
                     .then((res) => {
                         if (res.code) {
-                            resolve({ message: 'Usuário vinculado ao plano.', res })
+                            resolve({ message: 'subscription done.', res })
                         }
                     })
                     .catch((error) => {
-                        errorHandler(error, 'Falha ao vincular usuário ao plano.', reject);
+                        errorHandler(error, 'subscription failed.', reject);
                         return false;
                     });
             });
@@ -48,7 +48,7 @@ const subscription = deps => {
                         resolve(res);
                     })
                     .catch((error) => {
-                        errorHandler(error, 'Falha ao criar plano.', reject);
+                        errorHandler(error, 'failed to create a plan.', reject);
                         return false;
                     });
             });
@@ -68,7 +68,7 @@ const subscription = deps => {
                     let json = convert.xml2js(res, { compact: true, spaces: 4 })
                     resolve(json.session.id._text);
                 }).catch((error) => {
-                    errorHandler(error, 'Falha ao iniciar o pagamento.', reject);
+                    errorHandler(error, 'could not start a session.', reject);
                     return false;
                 });
             })
