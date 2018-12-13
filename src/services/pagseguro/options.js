@@ -1,7 +1,7 @@
 const request = require('request-promise');
 const convert = require('xml-js');
 
-const pgAPIUrl = process.env.PAG_url;
+const pgAPIURL = process.env.PAG_url;
 const pgAccess = { email: process.env.PAG_email, token: process.env.PAG_token };
 const pgHeader = {
     'Content-Type': 'application/json;charset=ISO-8859-1',
@@ -14,7 +14,7 @@ const subscription = deps => {
         new: (customer) => {
             const options = {
                 headers: pgHeader,
-                uri: `${pgAPIUrl}/pre-approvals`,
+                uri: `${pgAPIURL}/pre-approvals`,
                 qs: pgAccess,
                 body: customer,
                 json: true,
@@ -36,7 +36,7 @@ const subscription = deps => {
         create: plan => {
             const options = {
                 headers: pgHeader,
-                uri: `${pgAPIUrl}/pre-approvals/request`,
+                uri: `${pgAPIURL}/pre-approvals/request`,
                 qs: pgAccess,
                 body: plan,
                 json: true,
@@ -59,7 +59,7 @@ const subscription = deps => {
                 headers: {
                     'Content-Type': 'application/json;charset=ISO-8859-1'
                 },
-                uri: `${pgAPIUrl}/v2/sessions`,
+                uri: `${pgAPIURL}/v2/sessions`,
                 qs: pgAccess,
                 method: 'POST'
             }
