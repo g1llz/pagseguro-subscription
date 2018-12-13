@@ -1,7 +1,11 @@
 const errorHandler = require('../helpers/error-handler');
 
-const optionsModule = require('./options')({ errorHandler });
+const start = require('./payment-start')({ errorHandler });
+const subscriptionModule = require('./subscription')({ errorHandler });
+const notificationModule = require('./notifications')({ errorHandler });
 
 module.exports = {
-    options: () => optionsModule
+    subscription: () => subscriptionModule,
+    notification: () => notificationModule,
+    start
 }
