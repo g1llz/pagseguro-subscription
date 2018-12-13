@@ -1,7 +1,4 @@
-const errorHandler = (error, msg, rejectFunction) => {
-    console.log(error);
-    rejectFunction({ error: msg });
-}
+const errorHandler = require('../helpers/error-handler');
 
 const optionsModule = require('./options')({ errorHandler });
 
