@@ -1,8 +1,9 @@
-const db = require('../services/mysql');
+const ac = require('../services/auth');
+const db = require('../services/mongo');
 const pg = require('../services/pagseguro');
 
 const routes = (server) => {
-    server.get('/', (req, res, next) => {
+    server.get('/api/v1', (req, res, next) => {
         res.send('silence is gold.');
         next();
     });
@@ -10,7 +11,7 @@ const routes = (server) => {
     server.post('/api/v1/auth', async (req, res, next) => {
         const { email, password } = req.body;
         try {
-            res.send(await db.auth().authenticate(email, password));
+            res.send(await ac.auth().authenticate(email, password));
         } catch (error) {
             res.send(error);
         }
@@ -40,6 +41,25 @@ const routes = (server) => {
         const { customer } = req.body;
         try {
             res.send(await pg.options().new(customer));
+        } catch (error) {
+            res.send(error);
+        }
+        next();
+    });
+
+    server.get('/api/v1/users', async (req, res, next) => {
+        try {
+            res.send(await db.users().all());
+        } catch (error) {
+            res.send(error);
+        }
+        next();
+    });
+
+    server.post('/api/v1/users', async (req, res, next) => {
+        const { email, password } = req.body;
+        try {
+            res.send(await db.users().save(email, password));
         } catch (error) {
             res.send(error);
         }
