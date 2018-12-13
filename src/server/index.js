@@ -5,7 +5,7 @@ const authGuard = require('../http/authGuard');
 
 const server = restify.createServer();
 
-const exclusions = ['/api/v1/auth'];
+const exclusions = ['/api/v1/auth', '/api/v1/notifications'];
 
 server.pre(cors.preflight);
 server.use(cors.actual);
