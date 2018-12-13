@@ -16,14 +16,19 @@ const users = deps => {
         },
         save: (email, password) => {
             return new Promise((resolve, reject) => {
-                let user = new User({ email: email, password: sha1(password) });
-                user.save().then((response) => {
-                    response.password = undefined;
-                    resolve({ response });
-                }).catch((error) => {
-                    errorHandler(error, 'failed to save user.', reject);
+                if (email && password) {
+                    let user = new User({ email: email, password: sha1(password) });
+                    user.save().then((response) => {
+                        response.password = undefined;
+                        resolve({ response });
+                    }).catch((error) => {
+                        errorHandler(error, 'failed to save user.', reject);
+                        return false;
+                    });
+                } else {
+                    errorHandler(new Error('email or password not informed'), 'inform an email and password.', reject);
                     return false;
-                });
+                }
             })
         },
         update: (id, password) => {
