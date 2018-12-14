@@ -9,7 +9,7 @@ const users = deps => {
                 User.find().then((response) => {
                     resolve({ users: response });
                 }).catch((error) => {
-                    errorHandler(error, 'failed to list users.', reject);
+                    errorHandler(error, reject, 'failed to list users.');
                     return false;
                 });
             })
@@ -22,11 +22,11 @@ const users = deps => {
                         response.password = undefined;
                         resolve({ response });
                     }).catch((error) => {
-                        errorHandler(error, 'failed to save user.', reject);
+                        errorHandler(error, reject, 'failed to save user.');
                         return false;
                     });
                 } else {
-                    errorHandler(new Error('email or password not informed'), 'inform an email and password.', reject);
+                    errorHandler(new Error('email or password not informed'), reject, 'inform an email and password.');
                     return false;
                 }
             })
