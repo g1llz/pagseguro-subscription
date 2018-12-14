@@ -13,11 +13,11 @@ const auth = deps => {
                         const token = jwt.sign({ email, id }, process.env.JWT_secret, { expiresIn: 60 * 60 * 24 });
                         resolve({ token });
                     } else {
-                        errorHandler(new Error('user not found or invalid password'), 'user not found.', reject);
+                        errorHandler(new Error('user not found or invalid password'), reject, 'user not found or invalid password.');
                         return false;
                     }
                 }).catch((error) => {
-                    errorHandler(error, 'failed unexpected try again later.', reject);
+                    errorHandler(error, reject, 'failed unexpected try again later.');
                     return false;
                 })
             })

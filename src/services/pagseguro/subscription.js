@@ -12,7 +12,7 @@ const options = {
 const subscription = deps => {
     const { errorHandler } = deps;
     return {
-        new: customer => {
+        new: (customer) => {
             options.uri = `${APIURL}/pre-approvals`;
             options.body = customer;
             options.method = 'POST';
@@ -30,7 +30,7 @@ const subscription = deps => {
                     });
             });
         },
-        create: plan => {
+        create: (plan) => {
             options.uri = `${APIURL}/pre-approvals/request`;
             options.body = plan;
             options.method = 'POST';
@@ -38,7 +38,7 @@ const subscription = deps => {
                 request(options)
                     .then((res) => {
                         res = convert.xml2js(res, { compact: true, spaces: 4 })
-                        resolve(res);
+                        resolve({ message: 'subscription plan created', plan: res.preApprovalRequest });
                     })
                     .catch((err) => {
                         errorHandler(err, reject);
@@ -46,7 +46,7 @@ const subscription = deps => {
                     });
             });
         },
-        ordersByApprovalCode: code => {
+        ordersByApprovalCode: (code) => {
             options.uri = `${APIURL}/pre-approvals/${code}/payment-orders`;
             options.json = false;
             options.method = 'GET';
@@ -62,7 +62,7 @@ const subscription = deps => {
                     });
             });
         },
-        signatureDetailByApprovalCode: code => {
+        signatureDetailByApprovalCode: (code) => {
             options.uri = `${APIURL}/pre-approvals/${code}`;
             options.json = false;
             options.method = 'GET';

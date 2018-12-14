@@ -4,7 +4,7 @@ const convert = require('xml-js');
 const notification = deps => {
     const { errorHandler } = deps;
     return {
-        receive: code => {
+        receive: (code) => {
             const options = {
                 headers: { 'Content-Type': 'application/json;charset=ISO-8859-1', 'Accept': 'application/vnd.pagseguro.com.br.v3+xml;charset=ISO-8859-1' },
                 uri: `${process.env.PAG_url}/pre-approvals/notifications/${code}`,
