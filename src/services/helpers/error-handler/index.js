@@ -23,7 +23,7 @@ const errorHandler = (err, rejectFunction, msg = '') => {
                 {
                     fields: [
                         { title: 'MESSAGE', value: msg, short: false },
-                        { title: 'STACKTRACE', value: err.toString(), short: false }
+                        { title: 'STACKTRACE', value: err.stack, short: false }
                     ]
                 }
             ]
