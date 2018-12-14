@@ -68,9 +68,9 @@ const routes = (server) => {
     });
 
     server.post('/api/v1/notifications', async (req, res, next) => {
-        const { notificationCode } = req.body;
+        const { notificationCode, notificationType } = req.body;
         try {
-            res.send(await pg.notification().receive(notificationCode))
+            res.send(await pg.notification().receive(notificationCode, notificationType))
         } catch (error) {
             res.send(error);
         }

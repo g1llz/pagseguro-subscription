@@ -4,10 +4,11 @@ const convert = require('xml-js');
 const notification = deps => {
     const { errorHandler } = deps;
     return {
-        receive: (code) => {
+        receive: (code, type) => {
+            const path = type === 'preApproval' ? 'pre-approvals' : 'v3/transactions';
             const options = {
                 headers: { 'Content-Type': 'application/json;charset=ISO-8859-1', 'Accept': 'application/vnd.pagseguro.com.br.v3+xml;charset=ISO-8859-1' },
-                uri: `${process.env.PAG_url}/pre-approvals/notifications/${code}`,
+                uri: `${process.env.PAG_url}/${path}/notifications/${type === 'transaction' ? formatCode(code) : code}`,
                 qs: { email: process.env.PAG_email, token: process.env.PAG_token },
                 method: 'GET'
             }
@@ -24,6 +25,10 @@ const notification = deps => {
             });
         }
     }
+}
+
+const formatCode = (code) => {
+    return [code.substring(0, 6), '-', code.substring(6, 18), '-', code.substring(19, 30), '-', code.substring(30, 36)].join('')
 }
 
 module.exports = notification;
