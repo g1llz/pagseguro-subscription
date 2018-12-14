@@ -28,6 +28,7 @@
 		"restify": "^7.3.0",
 		"restify-cors-middleware": "^1.1.1",
 		"sha1": "^1.1.1",
+		"slack-notify": "^0.1.7",
 		"xml-js": "^1.6.8"
 	},
 	"devDependencies": {
