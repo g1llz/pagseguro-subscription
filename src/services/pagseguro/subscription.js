@@ -1,25 +1,21 @@
 const request = require('request-promise');
 const convert = require('xml-js');
 
-const pgAPIURL = process.env.PAG_url;
-const pgAccess = { email: process.env.PAG_email, token: process.env.PAG_token };
-const pgHeader = {
-    'Content-Type': 'application/json;charset=ISO-8859-1',
-    'Accept': 'application/vnd.pagseguro.com.br.v3+xml;charset=ISO-8859-1'
-};
+const APIURL = process.env.PAG_url;
+
+const options = {
+    headers: { 'Content-Type': 'application/json;charset=ISO-8859-1', 'Accept': 'application/vnd.pagseguro.com.br.v3+xml;charset=ISO-8859-1' },
+    qs: { email: process.env.PAG_email, token: process.env.PAG_token },
+    json: true
+}
 
 const subscription = deps => {
     const { errorHandler } = deps;
     return {
         new: customer => {
-            const options = {
-                headers: pgHeader,
-                uri: `${pgAPIURL}/pre-approvals`,
-                qs: pgAccess,
-                body: customer,
-                json: true,
-                method: 'POST'
-            }
+            options.uri = `${APIURL}/pre-approvals`;
+            options.body = customer;
+            options.method = 'POST';
             return new Promise((resolve, reject) => {
                 request(options)
                     .then((res) => {
@@ -35,14 +31,9 @@ const subscription = deps => {
             });
         },
         create: plan => {
-            const options = {
-                headers: pgHeader,
-                uri: `${pgAPIURL}/pre-approvals/request`,
-                qs: pgAccess,
-                body: plan,
-                json: true,
-                method: 'POST'
-            }
+            options.uri = `${APIURL}/pre-approvals/request`;
+            options.body = plan;
+            options.method = 'POST';
             return new Promise((resolve, reject) => {
                 request(options)
                     .then((res) => {
@@ -56,17 +47,14 @@ const subscription = deps => {
             });
         },
         ordersByApprovalCode: code => {
-            const options = {
-                headers: pgHeader,
-                uri: `${pgAPIURL}/pre-approvals/${code}/payment-orders`,
-                qs: pgAccess,
-                method: 'GET'
-            }
+            options.uri = `${APIURL}/pre-approvals/${code}/payment-orders`;
+            options.json = false;
+            options.method = 'GET';
             return new Promise((resolve, reject) => {
                 request(options)
                     .then((res) => {
-                        let json = convert.xml2js(res, { compact: true, spaces: 4 })
-                        resolve(json);
+                        res = convert.xml2js(res, { compact: true, spaces: 4 })
+                        resolve(res);
                     })
                     .catch((err) => {
                         errorHandler(err, reject);
@@ -75,17 +63,14 @@ const subscription = deps => {
             });
         },
         signatureDetailByApprovalCode: code => {
-            const options = {
-                headers: pgHeader,
-                uri: `${pgAPIURL}/pre-approvals/${code}`,
-                qs: pgAccess,
-                method: 'GET'
-            }
+            options.uri = `${APIURL}/pre-approvals/${code}`;
+            options.json = false;
+            options.method = 'GET';
             return new Promise((resolve, reject) => {
                 request(options)
                     .then((res) => {
-                        let json = convert.xml2js(res, { compact: true, spaces: 4 })
-                        resolve(json);
+                        res = convert.xml2js(res, { compact: true, spaces: 4 })
+                        resolve(res);
                     })
                     .catch((err) => {
                         errorHandler(err, reject);
