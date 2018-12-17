@@ -10,7 +10,7 @@ const auth = deps => {
                 User.find({ email: email, password: sha1(password) }).then((response) => {
                     if (response.length) {
                         const { email, id } = response[0];
-                        const token = jwt.sign({ email, id }, process.env.JWT_secret, { expiresIn: 60 * 60 * 24 });
+                        const token = jwt.sign({ email, id }, process.env.JWT_SECRET, { expiresIn: 60 * 60 * 24 });
                         resolve({ token });
                     } else {
                         errorHandler(new Error('user not found or invalid password'), reject, 'user not found or invalid password.');

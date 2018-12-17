@@ -20,8 +20,8 @@ const notification = deps => {
             const path = type === 'preApproval' ? 'pre-approvals' : 'v3/transactions';
             const options = {
                 headers: type === 'transaction' ? headerTransaction : headerPreApproval,
-                uri: `${process.env.PAG_url}/${path}/notifications/${type === 'transaction' ? formatCode(code) : code}`,
-                qs: { email: process.env.PAG_email, token: process.env.PAG_token },
+                uri: `${process.env.PAG_URL}/${path}/notifications/${type === 'transaction' ? formatCode(code) : code}`,
+                qs: { email: process.env.PAG_EMAIL, token: process.env.PAG_TOKEN },
                 method: 'GET'
             }
             return new Promise((resolve, reject) => {
@@ -45,7 +45,7 @@ const notification = deps => {
                             },
                             json: true
                         }).then((res) => {
-                            logger.log('info', { date: new Date().toISOString(), message: `notification send to ${process.env.URL_notification}` });
+                            logger.log('info', { date: new Date().toISOString(), message: `notification send to ${process.env.URL_NOTIFICATION}` });
                             resolve({ message: 'notification send.', date: new Date().toISOString() })
                         }).catch((err) => {
                             errorHandler(err, reject);

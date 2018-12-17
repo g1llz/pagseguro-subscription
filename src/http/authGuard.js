@@ -9,7 +9,7 @@ const authGuard = (deps) => {
                 return false;
             }
             try {
-                req.decoded = jwt.verify(token, process.env.JWT_secret);
+                req.decoded = jwt.verify(token, process.env.JWT_SECRET);
             } catch (error) {
                 res.send(403, { error: 'invalid token.' });
                 return false;

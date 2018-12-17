@@ -5,8 +5,8 @@ const start = deps => {
     const { errorHandler } = deps;
     const options = {
         headers: { 'Content-Type': 'application/json;charset=ISO-8859-1' },
-        uri: `${process.env.PAG_url}/v2/sessions`,
-        qs: { email: process.env.PAG_email, token: process.env.PAG_token },
+        uri: `${process.env.PAG_URL}/v2/sessions`,
+        qs: { email: process.env.PAG_EMAIL, token: process.env.PAG_TOKEN },
         method: 'POST'
     }
     return new Promise((resolve, reject) => {

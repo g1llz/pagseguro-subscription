@@ -1,11 +1,11 @@
 const request = require('request-promise');
 const convert = require('xml-js');
 
-const APIURL = process.env.PAG_url;
+const APIURL = process.env.PAG_URL;
 
 const options = {
     headers: { 'Content-Type': 'application/json;charset=ISO-8859-1', 'Accept': 'application/vnd.pagseguro.com.br.v3+xml;charset=ISO-8859-1' },
-    qs: { email: process.env.PAG_email, token: process.env.PAG_token },
+    qs: { email: process.env.PAG_EMAIL, token: process.env.PAG_TOKEN },
     json: true
 }
 
