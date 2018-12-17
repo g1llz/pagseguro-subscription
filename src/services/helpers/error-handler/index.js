@@ -1,5 +1,15 @@
+const winston = require('winston');
 const convert = require('xml-js');
+
 const slack = require('slack-notify')(process.env.MY_SLACK_WEBHOOK_URL);
+
+const logger = winston.createLogger({
+    level: 'error',
+    format: winston.format.json(),
+    transports: [
+        new winston.transports.File({ filename: 'error.log', level: 'error' })
+    ]
+});
 
 const errorHandler = (err, rejectFunction, msg = '') => {
     if (!msg) {
@@ -16,6 +26,7 @@ const errorHandler = (err, rejectFunction, msg = '') => {
                 }
             ]
         });
+        logger.log('error', { date: new Date().toISOString(), code: err.error.code._text, message: err.error.message._text });
     } else {
         slack.send({
             text: '*_(API)_ ERROR*',
@@ -28,9 +39,9 @@ const errorHandler = (err, rejectFunction, msg = '') => {
                 }
             ]
         });
+        logger.log('error', { date: new Date().toISOString(), message: err.stack });
     }
     rejectFunction({ error: err.error || msg });
-    console.log(err.error || err);
 }
 
 module.exports = errorHandler;
