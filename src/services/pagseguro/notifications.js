@@ -35,6 +35,7 @@ const notification = deps => {
                             method: 'POST',
                             body: {
                                 response: {
+                                    type: type,
                                     date: respRef.date,
                                     code: respRef.code,
                                     reference: respRef.reference,
