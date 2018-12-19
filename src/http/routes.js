@@ -1,5 +1,4 @@
-const ac = require('../services/auth');
-const db = require('../services/mongo');
+const db = require('../services/mysql');
 const pg = require('../services/pagseguro');
 
 const routes = (server) => {
@@ -11,9 +10,9 @@ const routes = (server) => {
     server.post('/api/v1/auth', async (req, res, next) => {
         const { email, password } = req.body;
         try {
-            res.send(await ac.auth().authenticate(email, password));
+            res.send(await db.auth().authenticate(email, password));
         } catch (error) {
-            res.send(error);
+            res.send(401, error);
         }
         next();
     });
@@ -22,7 +21,7 @@ const routes = (server) => {
         try {
             res.send(await pg.start);
         } catch (error) {
-            res.send(error);
+            res.send(401, error);
         }
         next();
     });
@@ -32,7 +31,7 @@ const routes = (server) => {
         try {
             res.send(await pg.subscription().create(plan));
         } catch (error) {
-            res.send(error);
+            res.send(400, error);
         }
         next();
     });
@@ -42,7 +41,7 @@ const routes = (server) => {
         try {
             res.send(await pg.subscription().new(customer));
         } catch (error) {
-            res.send(error);
+            res.send(400, error);
         }
         next();
     });
@@ -52,7 +51,7 @@ const routes = (server) => {
         try {
             res.send(await pg.subscription().ordersByApprovalCode(code));
         } catch (error) {
-            res.send(error);
+            res.send(400, error);
         }
         next();
     });
@@ -62,7 +61,7 @@ const routes = (server) => {
         try {
             res.send(await pg.subscription().signatureDetailByApprovalCode(code));
         } catch (error) {
-            res.send(error);
+            res.send(400, error);
         }
         next();
     });
@@ -72,26 +71,27 @@ const routes = (server) => {
         try {
             res.send(await pg.notification().receive(notificationCode, notificationType))
         } catch (error) {
-            res.send(error);
+            res.send(400, error);
         }
         next();
     });
 
     server.get('/api/v1/users', async (req, res, next) => {
         try {
-            res.send(await db.users().all());
+            res.send(await db.user().all());
         } catch (error) {
-            res.send(error);
+            res.send(404, error);
         }
         next();
     });
 
     server.post('/api/v1/users', async (req, res, next) => {
         const { email, password } = req.body;
+        console.log(email, password)
         try {
-            res.send(await db.users().save(email, password));
+            res.send(await db.user().save(email, password));
         } catch (error) {
-            res.send(error);
+            res.send(400, error);
         }
         next();
     });
