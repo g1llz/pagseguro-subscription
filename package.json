@@ -22,7 +22,6 @@
 	"dependencies": {
 		"dotenv": "^6.2.0",
 		"jsonwebtoken": "^8.4.0",
-		"mongoose": "^5.3.16",
 		"request": "^2.88.0",
 		"request-promise": "^4.2.2",
 		"restify": "^7.3.0",
@@ -30,7 +29,8 @@
 		"sha1": "^1.1.1",
 		"slack-notify": "^0.1.7",
 		"winston": "^3.1.0",
-		"xml-js": "^1.6.8"
+		"xml-js": "^1.6.8",
+		"mysql": "^2.16.0"
 	},
 	"devDependencies": {
 		"eslint": "^5.10.0",
