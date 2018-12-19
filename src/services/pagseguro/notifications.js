@@ -30,7 +30,7 @@ const notification = deps => {
                         res = convert.xml2js(res, { compact: true, spaces: 4 })
                         const respRef = type === 'transaction' ? res.transaction : res.preApproval;
                         request({
-                            uri: process.env.URL_notification,
+                            uri: process.env.URL_NOTIFICATION,
                             headers: { 'Content-Type': 'application/json;charset=ISO-8859-1' },
                             method: 'POST',
                             body: {
@@ -48,12 +48,12 @@ const notification = deps => {
                             logger.log('info', { date: new Date().toISOString(), message: `notification send to ${process.env.URL_NOTIFICATION}` });
                             resolve({ message: 'notification send.', date: new Date().toISOString() })
                         }).catch((err) => {
-                            errorHandler(err, reject);
+                            errorHandler(err, '', reject);
                             return false;
                         });
                     })
                     .catch((err) => {
-                        errorHandler(err, reject);
+                        errorHandler(err, '', reject);
                         return false;
                     });
             });

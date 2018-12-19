@@ -14,7 +14,7 @@ const start = deps => {
             let json = convert.xml2js(res, { compact: true, spaces: 4 })
             resolve(json.session.id._text);
         }).catch((err) => {
-            errorHandler(err, reject);
+            errorHandler(err, '', reject);
             return false;
         });
     })

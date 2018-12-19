@@ -25,7 +25,7 @@ const subscription = deps => {
                         }
                     })
                     .catch((err) => {
-                        errorHandler(err, reject);
+                        errorHandler(err, '', reject);
                         return false;
                     });
             });
@@ -41,7 +41,7 @@ const subscription = deps => {
                         resolve({ message: 'subscription plan created', plan: res.preApprovalRequest });
                     })
                     .catch((err) => {
-                        errorHandler(err, reject);
+                        errorHandler(err, '', reject);
                         return false;
                     });
             });
@@ -57,7 +57,7 @@ const subscription = deps => {
                         resolve(res);
                     })
                     .catch((err) => {
-                        errorHandler(err, reject);
+                        errorHandler(err, '', reject);
                         return false;
                     });
             });
@@ -73,7 +73,7 @@ const subscription = deps => {
                         resolve(res);
                     })
                     .catch((err) => {
-                        errorHandler(err, reject);
+                        errorHandler(err, '', reject);
                         return false;
                     });
             });
