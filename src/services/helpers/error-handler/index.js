@@ -11,8 +11,9 @@ const logger = winston.createLogger({
     ]
 });
 
-const errorHandler = (err, rejectFunction, msg = '') => {
-    if (!msg) {
+const errorHandler = (err, msg, rejectFn) => {
+    if (err.error && !err.cause) {
+        console.log('PAG')
         err = convert.xml2js(err.error, { compact: true, spaces: 4 });
         err = err.errors;
         slack.send({
@@ -27,21 +28,29 @@ const errorHandler = (err, rejectFunction, msg = '') => {
             ]
         });
         logger.log('error', { date: new Date().toISOString(), code: err.error.code._text, message: err.error.message._text });
+        rejectFn({ error: err.error });
     } else {
+        console.log('API')
+        let codeRef = 'N/A'; let messageRef;
+        if (err.code) codeRef = err.code;
+        if (err.cause) codeRef = err.name;
+        if (err.cause) messageRef = err.message;
+        if (err.apiMessage) messageRef = err.apiMessage;
+        if (err.sqlMessage) messageRef = err.sqlMessage;
         slack.send({
             text: '*_(API)_ ERROR*',
             attachments: [
                 {
                     fields: [
-                        { title: 'MESSAGE', value: msg, short: false },
-                        { title: 'STACKTRACE', value: err.stack, short: false }
+                        { title: 'CODE', value: codeRef, short: false },
+                        { title: 'MESSAGE', value: messageRef, short: false }
                     ]
                 }
             ]
         });
-        logger.log('error', { date: new Date().toISOString(), message: err.stack });
+        logger.log('error', { date: new Date().toISOString(), message: messageRef, code: codeRef });
+        rejectFn({ error: msg });
     }
-    rejectFunction({ error: err.error || msg });
 }
 
 module.exports = errorHandler;
