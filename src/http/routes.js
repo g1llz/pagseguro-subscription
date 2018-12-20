@@ -19,7 +19,7 @@ const routes = (server) => {
 
     server.post('/api/v1/start-payment', async (req, res, next) => {
         try {
-            res.send(await pg.start);
+            res.send(await pg.session().start());
         } catch (error) {
             res.send(401, error);
         }
