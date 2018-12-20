@@ -17,6 +17,7 @@ const users = deps => {
                         };
                         resolve({ users: results });
                     });
+                    connection.end();
                 });
             })
         },
@@ -35,6 +36,7 @@ const users = deps => {
                             };
                             resolve({ user: { email, id: results.insertId }, affectedRows: results.affectedRows });
                         });
+                        connection.end();
                     });
                 } else {
                     errorHandler({ apiMessage: 'email and password are required' }, 'email and password are required', reject);

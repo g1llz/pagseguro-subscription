@@ -21,6 +21,7 @@ const auth = deps => {
                             const token = jwt.sign({ email, id }, process.env.JWT_SECRET, { expiresIn: 60 * 60 * 24 });
                             resolve({ token });
                         });
+                        connection.end();
                     });
                 } else {
                     errorHandler({ apiMessage: 'email and password are required' }, 'email and password are required', reject);
