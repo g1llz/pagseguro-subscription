@@ -17,10 +17,13 @@ const notification = deps => {
     const { errorHandler } = deps;
     return {
         receive: (code, type) => {
+            console.log('-- GET notification')
+            console.log('CODE: ', code);
+            console.log('TYPE: ', type);
             const path = type === 'preApproval' ? 'pre-approvals' : 'v3/transactions';
             const options = {
                 headers: type === 'transaction' ? headerTransaction : headerPreApproval,
-                uri: `${process.env.PAG_URL}/${path}/notifications/${type === 'transaction' ? formatCode(code) : code}`,
+                uri: `${process.env.PAG_URL}/${path}/notifications/${code}`,
                 qs: { email: process.env.PAG_EMAIL, token: process.env.PAG_TOKEN },
                 method: 'GET'
             }
@@ -59,10 +62,6 @@ const notification = deps => {
             });
         }
     }
-}
-
-const formatCode = (code) => {
-    return [code.substring(0, 6), '-', code.substring(6, 18), '-', code.substring(18, 30), '-', code.substring(30, 36)].join('')
 }
 
 module.exports = notification;
