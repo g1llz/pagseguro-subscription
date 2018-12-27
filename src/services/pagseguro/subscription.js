@@ -48,7 +48,6 @@ const subscription = deps => {
         },
         ordersByApprovalCode: (code) => {
             options.uri = `${APIURL}/pre-approvals/${code}/payment-orders`;
-            options.json = false;
             options.method = 'GET';
             return new Promise((resolve, reject) => {
                 request(options)
@@ -64,7 +63,6 @@ const subscription = deps => {
         },
         signatureDetailByApprovalCode: (code) => {
             options.uri = `${APIURL}/pre-approvals/${code}`;
-            options.json = false;
             options.method = 'GET';
             return new Promise((resolve, reject) => {
                 request(options)
