@@ -15,20 +15,21 @@ const errorHandler = (err, msg, rejectFn) => {
     if (err.error && !err.cause) {
         console.log('PAG')
         err = convert.xml2js(err.error, { compact: true, spaces: 4 });
-        err = err.errors;
+        err = err.errors.error;
+        err = err instanceof Array ? err[0] : err;
         slack.send({
             text: '*_(PagSeguro)_ ERROR*',
             attachments: [
                 {
                     fields: [
-                        { title: 'CODE', value: err.error.code._text, short: true },
-                        { title: 'MESSAGE', value: err.error.message._text, short: true }
+                        { title: 'CODE', value: err.code._text, short: true },
+                        { title: 'MESSAGE', value: err.message._text, short: true }
                     ]
                 }
             ]
         });
-        logger.log('error', { date: new Date().toISOString(), code: err.error.code._text, message: err.error.message._text });
-        rejectFn({ error: err.error });
+        logger.log('error', { date: new Date().toISOString(), code: err.code._text, message: err.message._text });
+        rejectFn({ error: err });
     } else {
         console.log('API')
         let codeRef = 'N/A'; let messageRef;
