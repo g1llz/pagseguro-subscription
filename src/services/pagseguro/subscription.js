@@ -75,6 +75,21 @@ const subscription = deps => {
                         return false;
                     });
             });
+        },
+        cancelSubscription: (code) => {
+            options.uri = `${APIURL}/pre-approvals/${code}/cancel`;
+            options.method = 'PUT';
+            return new Promise((resolve, reject) => {
+                request(options)
+                    .then((res) => {
+                        // if OK, 'res' return nothing;
+                        resolve({ message: 'request for cancellation sent.' })
+                    })
+                    .catch((err) => {
+                        errorHandler(err, '', reject);
+                        return false;
+                    });
+            });
         }
     }
 }
