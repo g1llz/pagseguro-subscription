@@ -66,6 +66,16 @@ const routes = (server) => {
         next();
     });
 
+    server.post('/api/v1/subscription/cancel', async (req, res, next) => {
+        const { code } = req.body;
+        try {
+            res.send(await pg.subscription().cancelSubscription(code));
+        } catch (error) {
+            res.send(400, error);
+        }
+        next();
+    });
+
     server.post('/api/v1/notifications', async (req, res, next) => {
         const { notificationCode, notificationType } = req.body;
         try {
