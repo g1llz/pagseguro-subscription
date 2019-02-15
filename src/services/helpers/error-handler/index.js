@@ -1,5 +1,6 @@
 const winston = require('winston');
 const convert = require('xml-js');
+const xml2Opt = require('../remove-text-attribute');
 
 const slack = require('slack-notify')(process.env.MY_SLACK_WEBHOOK_URL);
 
@@ -14,7 +15,7 @@ const logger = winston.createLogger({
 const errorHandler = (err, msg, rejectFn) => {
     if (err.error && !err.cause) {
         console.log('PAG')
-        err = convert.xml2js(err.error, { compact: true, spaces: 4 });
+        err = convert.xml2js(err.error, xml2Opt);
         err = err.errors.error;
         err = err instanceof Array ? err[0] : err;
         slack.send({
@@ -22,13 +23,13 @@ const errorHandler = (err, msg, rejectFn) => {
             attachments: [
                 {
                     fields: [
-                        { title: 'CODE', value: err.code._text, short: true },
-                        { title: 'MESSAGE', value: err.message._text, short: true }
+                        { title: 'CODE', value: err.code, short: true },
+                        { title: 'MESSAGE', value: err.message, short: true }
                     ]
                 }
             ]
         });
-        logger.log('error', { date: new Date().toISOString(), code: err.code._text, message: err.message._text });
+        logger.log('error', { date: new Date().toISOString(), code: err.code, message: err.message });
         rejectFn({ error: err });
     } else {
         console.log('API')
