@@ -1,5 +1,6 @@
 const request = require('request-promise');
 const convert = require('xml-js');
+const xml2Opt = require('../helpers/remove-text-attribute');
 const winston = require('winston');
 
 const logger = winston.createLogger({
@@ -30,7 +31,7 @@ const notification = deps => {
             return new Promise((resolve, reject) => {
                 request(options)
                     .then((res) => {
-                        res = convert.xml2js(res, { compact: true, spaces: 4 })
+                        res = convert.xml2js(res, xml2Opt)
                         const respRef = type === 'transaction' ? res.transaction : res.preApproval;
                         request({
                             uri: process.env.URL_NOTIFICATION,
