@@ -26,10 +26,10 @@ const routes = (server) => {
         next();
     });
 
-    server.post('/api/v1/subscription/create', async (req, res, next) => {
+    server.post('/api/v1/plan/create', async (req, res, next) => {
         const { plan } = req.body;
         try {
-            res.send(await pg.subscription().create(plan));
+            res.send(await pg.plan().create(plan));
         } catch (error) {
             res.send(400, error);
         }
