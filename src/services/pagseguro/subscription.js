@@ -1,5 +1,6 @@
 const request = require('request-promise');
 const convert = require('xml-js');
+const xml2Opt = require('../helpers/remove-text-attribute');
 
 const APIURL = process.env.PAG_URL;
 
@@ -19,26 +20,10 @@ const subscription = deps => {
             return new Promise((resolve, reject) => {
                 request(options)
                     .then((res) => {
-                        res = convert.xml2js(res, { compact: true, spaces: 4 })
+                        res = convert.xml2js(res, xml2Opt)
                         if (res.directPreApproval) {
                             resolve({ message: 'subscription done.', code: res.directPreApproval.code })
                         }
-                    })
-                    .catch((err) => {
-                        errorHandler(err, '', reject);
-                        return false;
-                    });
-            });
-        },
-        create: (plan) => {
-            options.uri = `${APIURL}/pre-approvals/request`;
-            options.body = plan;
-            options.method = 'POST';
-            return new Promise((resolve, reject) => {
-                request(options)
-                    .then((res) => {
-                        res = convert.xml2js(res, { compact: true, spaces: 4 })
-                        resolve({ message: 'subscription plan created', plan: res.preApprovalRequest });
                     })
                     .catch((err) => {
                         errorHandler(err, '', reject);
@@ -52,7 +37,7 @@ const subscription = deps => {
             return new Promise((resolve, reject) => {
                 request(options)
                     .then((res) => {
-                        res = convert.xml2js(res, { compact: true, spaces: 4 })
+                        res = convert.xml2js(res, xml2Opt)
                         resolve(res);
                     })
                     .catch((err) => {
@@ -67,7 +52,7 @@ const subscription = deps => {
             return new Promise((resolve, reject) => {
                 request(options)
                     .then((res) => {
-                        res = convert.xml2js(res, { compact: true, spaces: 4 })
+                        res = convert.xml2js(res, xml2Opt)
                         resolve(res);
                     })
                     .catch((err) => {
