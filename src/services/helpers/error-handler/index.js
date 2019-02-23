@@ -17,7 +17,8 @@ const errorHandler = (err, msg, rejectFn) => {
         err = convert.xml2js(err.error, { compact: true, spaces: 4 });
         err = err.errors.error;
         err = err instanceof Array ? err[0] : err;
-        slack.send({
+
+        process.env.USE_SLACK && slack.send({
             text: '*_(PagSeguro)_ ERROR*',
             attachments: [
                 {
@@ -38,7 +39,8 @@ const errorHandler = (err, msg, rejectFn) => {
         if (err.cause) messageRef = err.message;
         if (err.apiMessage) messageRef = err.apiMessage;
         if (err.sqlMessage) messageRef = err.sqlMessage;
-        slack.send({
+
+        process.env.USE_SLACK && slack.send({
             text: '*_(API)_ ERROR*',
             attachments: [
                 {
