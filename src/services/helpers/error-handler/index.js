@@ -19,7 +19,7 @@ const errorHandler = (err, msg, rejectFn) => {
         err = err.errors.error;
         err = err instanceof Array ? err[0] : err;
 
-        process.env.USE_SLACK && slack.send({
+        process.env.USE_SLACK === 'true' && slack.send({
             text: '*_(PagSeguro)_ ERROR*',
             attachments: [
                 {
@@ -41,7 +41,7 @@ const errorHandler = (err, msg, rejectFn) => {
         if (err.apiMessage) messageRef = err.apiMessage;
         if (err.sqlMessage) messageRef = err.sqlMessage;
 
-        process.env.USE_SLACK && slack.send({
+        process.env.USE_SLACK === 'true' && slack.send({
             text: '*_(API)_ ERROR*',
             attachments: [
                 {
