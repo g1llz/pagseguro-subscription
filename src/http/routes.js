@@ -66,10 +66,20 @@ const routes = (server) => {
         next();
     });
 
+    server.post('/api/v1/subscription/order-discount', async (req, res, next) => {
+        const { code, discount } = req.body;
+        try {
+            res.send(await pg.subscription().discountInNextOrder(code, discount));
+        } catch (error) {
+            res.send(400, error);
+        }
+        next();
+    });
+
     server.post('/api/v1/subscription/cancel', async (req, res, next) => {
         const { code } = req.body;
         try {
-            res.send(await pg.subscription().cancelSubscription(code));
+            res.send(await pg.subscription().cancel(code));
         } catch (error) {
             res.send(400, error);
         }
