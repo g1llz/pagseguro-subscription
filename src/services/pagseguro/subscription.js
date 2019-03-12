@@ -13,6 +13,9 @@ const options = {
 const subscription = deps => {
     const { errorHandler } = deps;
     return {
+        /*   @params
+         *   access documentation --'
+         */
         new: (customer) => {
             options.uri = `${APIURL}/pre-approvals`;
             options.body = customer;
@@ -31,6 +34,29 @@ const subscription = deps => {
                     });
             });
         },
+        /*   @params
+         *   code: 22D09B366D6D5B955461BF9BF6C77F31
+         *   discount: { type: DISCOUNT_PERCENT, value: 10.33 }
+         */
+        discountInNextOrder: (code, discount) => {
+            options.uri = `${APIURL}/pre-approvals/${code}/discount`;
+            options.body = discount;
+            options.method = 'PUT';
+            return new Promise((resolve, reject) => {
+                request(options)
+                    .then((res) => {
+                        // if OK, 'res' return nothing;
+                        resolve({ message: 'request for discount in next order.' })
+                    })
+                    .catch((err) => {
+                        errorHandler(err, '', reject);
+                        return false;
+                    });
+            });
+        },
+        /*   @params
+         *   code: 22D09B366D6D5B955461BF9BF6C77F31
+         */
         ordersByApprovalCode: (code) => {
             options.uri = `${APIURL}/pre-approvals/${code}/payment-orders`;
             options.method = 'GET';
@@ -46,6 +72,9 @@ const subscription = deps => {
                     });
             });
         },
+        /*   @params
+         *   code: 22D09B366D6D5B955461BF9BF6C77F31
+         */
         signatureDetailByApprovalCode: (code) => {
             options.uri = `${APIURL}/pre-approvals/${code}`;
             options.method = 'GET';
@@ -61,7 +90,10 @@ const subscription = deps => {
                     });
             });
         },
-        cancelSubscription: (code) => {
+        /*   @params
+         *   code: 22D09B366D6D5B955461BF9BF6C77F31
+         */
+        cancel: (code) => {
             options.uri = `${APIURL}/pre-approvals/${code}/cancel`;
             options.method = 'PUT';
             return new Promise((resolve, reject) => {
