@@ -17,10 +17,15 @@ const headerPreApproval = { 'Content-Type': 'application/json;charset=ISO-8859-1
 const notification = deps => {
     const { errorHandler } = deps;
     return {
+        /*   @params
+         *   code: e.g. pre-approval: FDE3F3-08B7ADB7AD97-6DD4347F9B09-28AEE4
+         *         e.g. transaction : AE419B-B2E08041EFAF-29BDD98974766A
+         *   type: preApproval or transaction
+         */
         receive: (code, type) => {
             console.log('-- GET notification')
-            console.log('CODE: ', code);
-            console.log('TYPE: ', type);
+            console.log('-- CODE: ', code);
+            console.log('-- TYPE: ', type);
             const path = type === 'preApproval' ? 'pre-approvals' : 'v3/transactions';
             const options = {
                 headers: type === 'transaction' ? headerTransaction : headerPreApproval,
