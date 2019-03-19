@@ -13,6 +13,7 @@ const logger = winston.createLogger({
 });
 
 const errorHandler = (err, msg, rejectFn) => {
+    // console.log(err);
     if (err.error && !err.cause) {
         console.log('PAG')
         err = convert.xml2js(err.error, xml2Opt);
