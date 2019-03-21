@@ -49,7 +49,8 @@ const notification = deps => {
                                     code: respRef.code,
                                     reference: respRef.reference,
                                     status: respRef.status,
-                                    lastEventDate: respRef.lastEventDate
+                                    lastEventDate: respRef.lastEventDate,
+                                    grossAmount: type === 'transaction' ? respRef.grossAmount : '0.00'
                                 }
                             },
                             json: true
