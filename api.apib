@@ -1,0 +1,158 @@
+FORMAT: 1A
+HOST: http://sample.io/api/v1
+
+# PAGSEGURO Subscription
+
+API that implements the PagSeguro signature method (recurring payment) 
+
+# Group Get start
+
+### Install
+
++ npm i to get dependences
++ copy and rename .env.example to .env, and put your configs ..
++ create a user in your DB. .(necessary to the get token)
++ finally, npm run dev to go!
+
+### .ENV File
+
+*PAGSEGURO CREDENTIALS*
++ PAG_URL=https://ws.sandbox.pagseguro.uol.com.br
++ PAG_EMAIL=
++ PAG_TOKEN=
+
+*URL TO API SEND NOTIFICATION* 
++ URL_NOTIFICATION=
+
+*JWT*
++ JWT_SECRET=
+
+*APP PORT*
++ PORT=3456
+
+*SLACK NOTIFY*
++ MY_SLACK_WEBHOOK_URL=
++ USE_SLACK=true
+
+*DB CONFIG*
++ MYSQL_host=
++ MYSQL_user=
++ MYSQL_password=
++ MYSQL_database=
+
+### PM2
+
+Aqui podemos descrever detalhes que são comuns a todos os serviços como formatos, headers, tipos de erros, etc
+
+# Group API
+
+## Start payment [/start-payment]
+
+### Get session ID [POST]
+
++ Request 
+
+    + Headers
+
+          Content-Type: application/json;charset=ISO-8859-1
+
++ Response 200 (application/json)
+    + Body
+            {
+              "session": {
+                "id": "620f99e348c24f07877c927b353e49d3"
+              }
+
+            }
+
+## Create Plan [/plan/create]
+
+### Create a Plan [POST]
+
++ Request JSON
+
+    + Headers
+
+          Content-Type: application/json;charset=ISO-8859-1,
+          Accept: application/vnd.pagseguro.com.br.v3+xml;charset=ISO-8859-1
+
++ Response 200 (application/json)
+    + Body
+            {
+              "message": "subscription plan created", 
+              "plan": {
+                "code": "DC2DAC98FBFBDD1554493F94E85FAE05",
+                "date": "2014-01-21T00:00:00.000-03:00"           
+              }
+
+            }
+
+## New subscription [/subscription/new]
+
+### New subscription [POST]
+
++ Request JSON
+
+    + Headers
+
+          Content-Type: application/json;charset=ISO-8859-1,
+          Accept: application/vnd.pagseguro.com.br.v3+xml;charset=ISO-8859-1
+    + Body          
+
++ Response 200 (application/json)
+
+    + Body
+            {
+              "message": "subscription done", 
+              "code": "4989E778E4E4315BB4F37F9CAF05D094" // signature code
+            }
+
+## Cancel subscription [/subscription/cancel]
+
+### Cancel subscription [POST]
+
++ Request JSON
+
+    + Headers
+
+          Content-Type: application/json;charset=ISO-8859-1,
+          Accept: application/vnd.pagseguro.com.br.v3+xml;charset=ISO-8859-1
+    + Body
+            {
+              "code": "4989E778E4E4315BB4F37F9CAF05D094" // signature code
+            }
+
++ Response 200 (application/json)
+
+    + Body
+            {
+              "message": "request for cancellation sent"
+            }
+
+## Discount in next order [/subscription/order-discount]
+
+### Discount in next order [POST]
+
++ Request JSON
+
+    + Headers
+
+          Content-Type: application/json;charset=ISO-8859-1,
+          Accept: application/vnd.pagseguro.com.br.v3+xml;charset=ISO-8859-1
+
+    + Body
+            {
+              "code": "4989E778E4E4315BB4F37F9CAF05D094", // signature code
+              "discount": {
+                "type": "DISCOUNT_PERCENT",
+                "value": 10.00
+              }
+
+            }
+
++ Response 200 (application/json)
+
+    + Body
+            {
+              "message": "request for discount in next order"
+            }
