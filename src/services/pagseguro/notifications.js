@@ -55,7 +55,12 @@ const notification = deps => {
                             },
                             json: true
                         }).then((res) => {
-                            logger.log('info', { date: new Date().toISOString(), message: `notification send to ${process.env.URL_NOTIFICATION}` });
+                            logger.log('info', {
+                                date: new Date().toISOString(),
+                                type: type,
+                                code: code,
+                                message: `notification send to ${process.env.URL_NOTIFICATION}`
+                            });
                             resolve({ message: 'notification send.', date: new Date().toISOString() })
                         }).catch((err) => {
                             errorHandler(err, '', reject);
