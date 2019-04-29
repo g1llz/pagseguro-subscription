@@ -15,7 +15,7 @@ const headerTransaction = { 'Content-Type': 'application/json;charset=ISO-8859-1
 const headerPreApproval = { 'Content-Type': 'application/json;charset=ISO-8859-1', 'Accept': 'application/vnd.pagseguro.com.br.v3+xml;charset=ISO-8859-1' }
 
 const notification = deps => {
-    const { errorHandler } = deps;
+    const { errorHandler, notFoundOrUnauthorized } = deps;
     return {
         /*   @params
          *   code: e.g. pre-approval: FDE3F3-08B7ADB7AD97-6DD4347F9B09-28AEE4
@@ -63,11 +63,19 @@ const notification = deps => {
                             });
                             resolve({ message: 'notification send.', date: new Date().toISOString() })
                         }).catch((err) => {
-                            errorHandler(err, '', reject);
+                            errorHandler({
+                                stacktrace: err.toString(),
+                                status: 503,
+                                message: { name: err.name, text: err.message }
+                            }, '', reject);
                             return false;
                         });
                     })
                     .catch((err) => {
+                        if (err.response.statusCode === 404 || err.response.statusCode === 401) {
+                            errorHandler(notFoundOrUnauthorized(err.response.statusCode), '', reject);
+                            return false;
+                        }
                         errorHandler(err, '', reject);
                         return false;
                     });

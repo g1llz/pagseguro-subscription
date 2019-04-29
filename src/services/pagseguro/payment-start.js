@@ -3,7 +3,7 @@ const convert = require('xml-js');
 const xml2Opt = require('../helpers/remove-text-attribute');
 
 const session = deps => {
-    const { errorHandler } = deps;
+    const { errorHandler, notFoundOrUnauthorized } = deps;
     return {
         start: () => {
             const options = {
@@ -17,7 +17,7 @@ const session = deps => {
                     res = convert.xml2js(res, xml2Opt)
                     resolve(res.session.id);
                 }).catch((err) => {
-                    errorHandler(err, '', reject);
+                    errorHandler(notFoundOrUnauthorized(err.response.statusCode), '', reject);
                     return false;
                 });
             })

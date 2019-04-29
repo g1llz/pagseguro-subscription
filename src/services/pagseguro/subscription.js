@@ -11,13 +11,13 @@ const options = {
 }
 
 const subscription = deps => {
-    const { errorHandler } = deps;
+    const { errorHandler, notFoundOrUnauthorized } = deps;
     return {
         /*   @params
          *   access documentation --'
          */
         new: (customer) => {
-            options.uri = `${APIURL}/pre-approvals`;
+            options.uri = `${APIURL}/pre-xapprovals`;
             options.body = customer;
             options.method = 'POST';
             return new Promise((resolve, reject) => {
@@ -29,6 +29,10 @@ const subscription = deps => {
                         }
                     })
                     .catch((err) => {
+                        if (err.response.statusCode === 404 || err.response.statusCode === 401) {
+                            errorHandler(notFoundOrUnauthorized(err.response.statusCode), '', reject);
+                            return false;
+                        }
                         errorHandler(err, '', reject);
                         return false;
                     });
@@ -49,6 +53,10 @@ const subscription = deps => {
                         resolve({ message: 'request for discount in next order.' })
                     })
                     .catch((err) => {
+                        if (err.response.statusCode === 404 || err.response.statusCode === 401) {
+                            errorHandler(notFoundOrUnauthorized(err.response.statusCode), '', reject);
+                            return false;
+                        }
                         errorHandler(err, '', reject);
                         return false;
                     });
@@ -67,6 +75,10 @@ const subscription = deps => {
                         resolve(res);
                     })
                     .catch((err) => {
+                        if (err.response.statusCode === 404 || err.response.statusCode === 401) {
+                            errorHandler(notFoundOrUnauthorized(err.response.statusCode), '', reject);
+                            return false;
+                        }
                         errorHandler(err, '', reject);
                         return false;
                     });
@@ -85,6 +97,10 @@ const subscription = deps => {
                         resolve(res);
                     })
                     .catch((err) => {
+                        if (err.response.statusCode === 404 || err.response.statusCode === 401) {
+                            errorHandler(notFoundOrUnauthorized(err.response.statusCode), '', reject);
+                            return false;
+                        }
                         errorHandler(err, '', reject);
                         return false;
                     });
@@ -103,6 +119,10 @@ const subscription = deps => {
                         resolve({ message: 'request for cancellation sent.' })
                     })
                     .catch((err) => {
+                        if (err.response.statusCode === 404 || err.response.statusCode === 401) {
+                            errorHandler(notFoundOrUnauthorized(err.response.statusCode), '', reject);
+                            return false;
+                        }
                         errorHandler(err, '', reject);
                         return false;
                     });

@@ -11,7 +11,7 @@ const options = {
 }
 
 const plan = deps => {
-    const { errorHandler } = deps;
+    const { errorHandler, notFoundOrUnauthorized } = deps;
     return {
         /*   @params
          *   access documentation --'
@@ -27,6 +27,10 @@ const plan = deps => {
                         resolve({ message: 'subscription plan created', plan: res.preApprovalRequest });
                     })
                     .catch((err) => {
+                        if (err.response.statusCode === 404 || err.response.statusCode === 401) {
+                            errorHandler(notFoundOrUnauthorized(err.response.statusCode), '', reject);
+                            return false;
+                        }
                         errorHandler(err, '', reject);
                         return false;
                     });
