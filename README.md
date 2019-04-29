@@ -10,9 +10,9 @@ NOTE: The documentation is a **work in progress**.
 + create a user in your DB. (necessary to the get token)
 + finally, **npm run dev** to go!
 
-### **.env (dev environment)**
+### **.ENV (dev environment)**
 
-**PAGSEGURO CREDENTIALS**
+**Credentials**
 *(put your credentials of Pagseguro sandbox)*
 ```js
 PAG_URL=https://ws.sandbox.pagseguro.uol.com.br
@@ -20,7 +20,9 @@ PAG_EMAIL=
 PAG_TOKEN=
 ```
 
-**URL TO API SEND NOTIFICATION** 
+**URL to send return of pagseguro notifications**
+
+Put here the URL that receives the return of all notifications send by Pagseguro. They send all status change of signature through these notifications.
 ```js
 URL_NOTIFICATION=
 ```
