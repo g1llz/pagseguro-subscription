@@ -59,10 +59,13 @@ MYSQL_database=
 
 ### **PM2 (prod environment)**
 
-Change the file **ecosystem.config.js** with your production credentials :smile:
++ copy and rename the file **example.ecosystem.config.js** to **ecosystem.config.js**.
++ change the file with your production credentials :smile:
++ finally **pm2 start ecosystem.config.js** to run!
+
 ```js
 apps: [{
-        name: 'pagseguro-sub',
+        name: 'pseg',
         script: './src/index.js',
         instances: 0,
         exec_mode: 'cluster',
@@ -72,7 +75,7 @@ apps: [{
             PAG_TOKEN: 'XXXXXX',
             URL_NOTFICATION: 'XXXXXX',
             JWT_SECRET: 'XXXXXX',
-            PORT: XXXX,
+            PORT: 3003,
             MY_SLACK_WEBHOOK_URL: 'XXXXXX',
             MYSQL_host: 'XXXXXX',
             MYSQL_user: 'XXXXXX',
@@ -82,7 +85,4 @@ apps: [{
     }]
 ```
 
-### **START PM2**
-```
-pm2 start ecosystem.config.js
-```
+See more [PM2](https://github.com/Unitech/pm2) :heart:
