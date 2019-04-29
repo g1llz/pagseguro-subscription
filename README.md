@@ -67,7 +67,7 @@ apps: [{
         instances: 0,
         exec_mode: 'cluster',
         env: {
-            PAG_URL: 'https://ws.sandbox.pagseguro.uol.com.br',
+            PAG_URL: 'https://ws.pagseguro.uol.com.br',
             PAG_EMAIL: 'XXXXXX@XXXXXX.XXX.XX',
             PAG_TOKEN: 'XXXXXX',
             URL_NOTFICATION: 'XXXXXX',
