@@ -9,12 +9,20 @@ const auth = deps => {
                 if (email && password) {
                     pool.getConnection((error, connection) => {
                         if (error) {
-                            errorHandler(error, 'MySQL Error.', reject);
+                            errorHandler({
+                                stacktrace: error.toString(),
+                                status: 500,
+                                message: 'MySQL Error'
+                            }, 'MySQL Error.', reject);
                             return false;
                         };
                         connection.query('SELECT id, email FROM users WHERE email = ? AND password = ?', [email, sha1(password)], (error, results) => {
                             if (error || !results.length) {
-                                errorHandler(error || { apiMessage: 'user not found' }, 'user not found', reject);
+                                errorHandler({
+                                    stacktrace: error ? error.toString() : '',
+                                    status: 401,
+                                    message: 'email or password is incorrect'
+                                }, 'email or password is incorrect', reject);
                                 return false;
                             };
                             const { email, id } = results[0];
@@ -24,7 +32,11 @@ const auth = deps => {
                         connection.end();
                     });
                 } else {
-                    errorHandler({ apiMessage: 'email and password are required' }, 'email and password are required', reject);
+                    errorHandler({
+                        stacktrace: '',
+                        status: 400,
+                        message: 'email and password is required'
+                    }, 'email and password is required', reject);
                     return false;
                 }
             })
