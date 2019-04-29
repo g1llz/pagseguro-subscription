@@ -3,12 +3,14 @@ This API implements the recurring payment of [PAGSEGURO](https://dev.pagseguro.u
 
 NOTE: The documentation is a **work in progress**.
 
+
 ### **Install**
 
 + npm i to get dependences
 + copy and rename **.env.example** to **.env**, and put your configs..
 + create a user in your DB. (necessary to the get token)
 + finally, **npm run dev** to go!
+
 
 ### **.ENV (dev environment)**
 
@@ -33,20 +35,20 @@ URL_NOTIFICATION=
 JWT_SECRET=
 ```
 
-**APP PORT**
+**Port**
 *(the port where your server listen)*
 ```js
 PORT=3456
 ```
 
-**SLACK NOTIFY**
+**Slack notify**
 *(slack credentials to receive errors notifications on channel)*
 ```js
 MY_SLACK_WEBHOOK_URL=
 USE_SLACK=true
 ```
 
-**DB CONFIG**
+**DB config**
 ```js
 MYSQL_host=
 MYSQL_user=
@@ -54,5 +56,33 @@ MYSQL_password=
 MYSQL_database=
 ```
 
-### **PM2 (prod environment)** ##
-coming soon ...
+
+### **PM2 (prod environment)**
+
+Change the file **ecosystem.config.js** with your production credentials :smile:
+```js
+apps: [{
+        name: 'pagseguro-sub',
+        script: './src/index.js',
+        instances: 0,
+        exec_mode: 'cluster',
+        env: {
+            PAG_URL: 'https://ws.sandbox.pagseguro.uol.com.br',
+            PAG_EMAIL: 'XXXXXX@XXXXXX.XXX.XX',
+            PAG_TOKEN: 'XXXXXX',
+            URL_NOTFICATION: 'XXXXXX',
+            JWT_SECRET: 'XXXXXX',
+            PORT: XXXX,
+            MY_SLACK_WEBHOOK_URL: 'XXXXXX',
+            MYSQL_host: 'XXXXXX',
+            MYSQL_user: 'XXXXXX',
+            MYSQL_password: 'XXXXXX',
+            MYSQL_database: 'XXXXXX'
+        }
+    }]
+```
+
+### **START PM2**
+```
+pm2 start ecosystem.config.js
+```
