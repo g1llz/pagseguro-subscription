@@ -1,130 +1,146 @@
 FORMAT: 1A
-HOST: http://sample.io/api/v1
+HOST: http://your-url.io/api/v1
 
 # PAGSEGURO Subscription
 
-API that implements the PagSeguro signature method (recurring payment) 
-
-# Group Get start
-
-### Install
-
-+ npm i to get dependences
-+ copy and rename .env.example to .env, and put your configs ..
-+ create a user in your DB. .(necessary to the get token)
-+ finally, npm run dev to go!
-
-### .ENV File
-
-*PAGSEGURO CREDENTIALS*
-+ PAG_URL=https://ws.sandbox.pagseguro.uol.com.br
-+ PAG_EMAIL=
-+ PAG_TOKEN=
-
-*URL TO API SEND NOTIFICATION* 
-+ URL_NOTIFICATION=
-
-*JWT*
-+ JWT_SECRET=
-
-*APP PORT*
-+ PORT=3456
-
-*SLACK NOTIFY*
-+ MY_SLACK_WEBHOOK_URL=
-+ USE_SLACK=true
-
-*DB CONFIG*
-+ MYSQL_host=
-+ MYSQL_user=
-+ MYSQL_password=
-+ MYSQL_database=
-
-### PM2
-
-Aqui podemos descrever detalhes que são comuns a todos os serviços como formatos, headers, tipos de erros, etc
-
 # Group API
 
-## Start payment [/start-payment]
+## Authentication [/auth]
 
-### Get session ID [POST]
+### Get your access token [POST]
+
+The access token is required for almost all requests in API.
 
 + Request 
 
     + Headers
 
-          Content-Type: application/json;charset=ISO-8859-1
+            Content-Type: application/json;charset=ISO-8859-1
+    
+    + Body
+
+            { 
+                "email": "your@email.com",
+                "password": "password"     
+            }
 
 + Response 200 (application/json)
     + Body
-            {
-              "session": {
-                "id": "620f99e348c24f07877c927b353e49d3"
-              }
 
+            { 
+                "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."     
             }
+
+## Start payment [/start-payment]
+
+### Get session ID [GET]
+
+This endpoint gets a session ID in the PAGSEGURO. 
+This ID is required to generate the hash of transaction and the token of the card.
+
++ Request 
+
+    + Headers
+
+            Content-Type: application/json;charset=ISO-8859-1
+            x-access-token: 'YOUR_TOKEN'
+
++ Response 200 (application/json)
+    + Body
+
+            { "620f99e348c24f07877c927b353e49d3" }
 
 ## Create Plan [/plan/create]
 
 ### Create a Plan [POST]
 
+Use to create a new recurrent signature plan.
+
 + Request JSON
 
     + Headers
 
-          Content-Type: application/json;charset=ISO-8859-1,
-          Accept: application/vnd.pagseguro.com.br.v3+xml;charset=ISO-8859-1
+            Content-Type: application/json;charset=ISO-8859-1,
+            x-access-token: "YOUR_TOKEN"
+
+    + Body
+
+            {
+                "plan": {
+                    "reference": "PLAN_REFERENCE",
+                    "preApproval": {
+                        "name": "PLAN_NAME",
+                        "charge": "AUTO",
+                        "period": "MONTHLY",
+                        "amountPerPayment": 10.99,
+                        "trialPeriodDuration": "", // empty if the plan no has a trial period
+                        "expiration": {
+                            "value": "24",
+                            "unit": "MONTHS"
+                        },
+                        "details": "description of your plan"
+                    }
+                }
+            }
+            
 
 + Response 200 (application/json)
     + Body
+      
             {
-              "message": "subscription plan created", 
-              "plan": {
-                "code": "DC2DAC98FBFBDD1554493F94E85FAE05",
-                "date": "2014-01-21T00:00:00.000-03:00"           
-              }
-
+                "message": "subscription plan created", 
+                "plan": {
+                    "code": "DC2DAC98FBFBDD1554493F94E85FAE05",
+                    "date": "2014-01-21T00:00:00.000-03:00"           
+                }
             }
 
 ## New subscription [/subscription/new]
 
 ### New subscription [POST]
 
-+ Request JSON
-
-    + Headers
-
-          Content-Type: application/json;charset=ISO-8859-1,
-          Accept: application/vnd.pagseguro.com.br.v3+xml;charset=ISO-8859-1
-    + Body          
-
-+ Response 200 (application/json)
-
-    + Body
-            {
-              "message": "subscription done", 
-              "code": "4989E778E4E4315BB4F37F9CAF05D094" // signature code
-            }
-
-## Cancel subscription [/subscription/cancel]
-
-### Cancel subscription [POST]
+Use to subscribe to a plan.
 
 + Request JSON
 
     + Headers
 
-          Content-Type: application/json;charset=ISO-8859-1,
-          Accept: application/vnd.pagseguro.com.br.v3+xml;charset=ISO-8859-1
-    + Body
-            {
-              "code": "4989E778E4E4315BB4F37F9CAF05D094" // signature code
-            }
+            Content-Type: application/json;charset=ISO-8859-1,
+            x-access-token: 'YOUR_TOKEN'
+
+    + Body      
+
+            { // coming soon... }    
 
 + Response 200 (application/json)
 
     + Body
+
+            {
+                "message": "subscription done", 
+                "code": "4989E778E4E4315BB4F37F9CAF05D094", // signature code
+            }
+
+## Cancel subscription [/subscription/{code}/cancel]
+
+### Cancel subscription [PUT]
+
++ Parameters
+
+    + code: 4989E778E4E4315BB4F37F9CAF05D094 (string) - The signature code.
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json;charset=ISO-8859-1,
+            x-access-token: 'YOUR_TOKEN'
+
+
++ Response 200 (application/json)
+
+    + Body
+
             {
               "message": "request for cancellation sent"
             }
@@ -137,22 +153,138 @@ Aqui podemos descrever detalhes que são comuns a todos os serviços como format
 
     + Headers
 
-          Content-Type: application/json;charset=ISO-8859-1,
-          Accept: application/vnd.pagseguro.com.br.v3+xml;charset=ISO-8859-1
+            Content-Type: application/json;charset=ISO-8859-1,
+            x-access-token: 'YOUR_TOKEN'
 
     + Body
+
             {
-              "code": "4989E778E4E4315BB4F37F9CAF05D094", // signature code
-              "discount": {
+                "code": "4989E778E4E4315BB4F37F9CAF05D094", // signature code
+                "discount": {
                 "type": "DISCOUNT_PERCENT",
                 "value": 10.00
-              }
-
+                }
             }
 
 + Response 200 (application/json)
 
     + Body
+
             {
-              "message": "request for discount in next order"
+                "message": "request for discount in next order"
+            }
+
+## Get orders [/subscription/{code}/orders]
+
+### List all payment orders [GET]
+
+Use to get all payment orders for this signature.
+
++ Parameters
+
+    + code: 4989E778E4E4315BB4F37F9CAF05D094 (string) - The signature code.
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json;charset=ISO-8859-1,
+            x-access-token: 'YOUR_TOKEN'
+
++ Response 200 (application/json)
+
+    + Body
+
+            {
+                "paymentOrdersResult": {
+                    "date": "2019-04-29T12:30:57-03:00",
+                    "resultsInThisPage": "2",
+                    "currentPage": "1",
+                    "totalPages": "1",
+                    "paymentOrders": {
+                        "paymentOrder": [
+                            {
+                                "code": "5EAF308PPPPP417584AF2EE717DZ123OI",
+                                "status": "5",
+                                "amount": "29.90",
+                                "grossAmount": "29.9",
+                                "lastEventDate": "2019-04-11T09:01:50-03:00",
+                                "discount": {
+                                    "type": "DISCOUNT_PERCENT",
+                                    "value": "0"
+                                },
+                                "schedulingDate": "2019-04-11T09:01:19-03:00",
+                                "transactions": {
+                                    "code": "3C1AAAAA55DC4247A22C95365XXX123C",
+                                    "date": "2019-04-11T09:01:20-03:00",
+                                    "status": "3"
+                                }
+                            },
+                            {
+                                "code": "14DB51E77A894E1DDDDE61596118ENC9",
+                                "status": "1",
+                                "amount": "29.90",
+                                "grossAmount": "0",
+                                "lastEventDate": "2019-04-29T10:35:02-03:00",
+                                "discount": {
+                                    "type": "DISCOUNT_PERCENT",
+                                    "value": "10.33"
+                                },
+                                "schedulingDate": "2019-05-11T08:01:19-03:00"
+                            }
+                        ]
+                    }
+                }
+            }
+
+## Signature detail [/subscription/{code}/detail]
+
+### Signature details [GET]
+
+Use to shown signature detail.
+
++ Parameters
+
+    + code: 4989E778E4E4315BB4F37F9CAF05D094 (string) - The signature code.
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json;charset=ISO-8859-1,
+            x-access-token: 'YOUR_TOKEN'
+
++ Response 200 (application/json)
+
+    + Body
+
+            {
+                "preApproval": {
+                    "name": "PLAN_NAME",
+                    "code": "0F34CCCF3BB7417EE4573XXXXXB292FA",
+                    "date": "2019-04-11T09:01:19-03:00",
+                    "tracker": "BF0ABC",
+                    "status": "ACTIVE",
+                    "reference": "4312f5a1f493af35f3e4",
+                    "lastEventDate": "2019-04-29T11:33:01-03:00",
+                    "charge": "AUTO",
+                    "sender": {
+                        "name": "Bruce Wayne",
+                        "email": "batman@gotham.com",
+                        "phone": {
+                            "areaCode": "11",
+                            "number": "91234567"
+                        },
+                        "address": {
+                            "street": "Rua Exemplo",
+                            "number": "123",
+                            "complement": "Casa",
+                            "district": "Centro",
+                            "city": "Pipa",
+                            "state": "RN",
+                            "country": "BRA",
+                            "postalCode": "123456789"
+                        }
+                    }
+                }
             }
