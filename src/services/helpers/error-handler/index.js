@@ -13,9 +13,10 @@ const logger = winston.createLogger({
 });
 
 const errorHandler = (err, msg, rejectFn) => {
-    // console.log(err);
-    if (err.error && !err.cause) {
-        console.log('PAG')
+    let status;
+    if ((err.error) && !err.cause) {
+        status = err.response.statusCode;
+        console.log('PAG');
         err = convert.xml2js(err.error, xml2Opt);
         err = err.errors.error;
         err = err instanceof Array ? err[0] : err;
@@ -31,30 +32,24 @@ const errorHandler = (err, msg, rejectFn) => {
                 }
             ]
         });
-        logger.log('error', { date: new Date().toISOString(), code: err.code, message: err.message });
-        rejectFn({ error: err });
+        logger.log('error', { date: new Date().toISOString(), status: status, code: err.code, message: err.message });
+        rejectFn({ status: status, error: err });
     } else {
-        console.log('API')
-        let codeRef = 'N/A'; let messageRef;
-        if (err.code) codeRef = err.code;
-        if (err.cause) codeRef = err.name;
-        if (err.cause) messageRef = err.message;
-        if (err.apiMessage) messageRef = err.apiMessage;
-        if (err.sqlMessage) messageRef = err.sqlMessage;
-
+        status = err.status;
+        console.log('API');
         process.env.USE_SLACK === 'true' && slack.send({
             text: '*_(API)_ ERROR*',
             attachments: [
                 {
                     fields: [
-                        { title: 'CODE', value: codeRef, short: false },
-                        { title: 'MESSAGE', value: messageRef, short: false }
+                        { title: 'MESSAGE', value: JSON.stringify(err.message), short: false },
+                        { title: 'STACKTRACE', value: err.stacktrace, short: false }
                     ]
                 }
             ]
         });
-        logger.log('error', { date: new Date().toISOString(), message: messageRef, code: codeRef });
-        rejectFn({ error: msg });
+        logger.log('error', { date: new Date().toISOString(), status: status, message: err.message, stacktrace: err.stacktrace });
+        rejectFn({ status: status, error: err.message });
     }
 }
 
