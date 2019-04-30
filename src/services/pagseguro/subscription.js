@@ -17,7 +17,7 @@ const subscription = deps => {
          *   access documentation --'
          */
         new: (customer) => {
-            options.uri = `${APIURL}/pre-xapprovals`;
+            options.uri = `${APIURL}/pre-approvals`;
             options.body = customer;
             options.method = 'POST';
             return new Promise((resolve, reject) => {

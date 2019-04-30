@@ -2,10 +2,7 @@ const errorHandler = require('../helpers/error-handler');
 
 const notFoundOrUnauthorized = (statusCode) => ({
     status: statusCode,
-    message: {
-        name: statusCode === 404 ? 'not found' : 'unauthorized ',
-        text: statusCode === 404 ? 'resource not found' : 'resource unauthorized'
-    },
+    message: statusCode === 404 ? 'resource not found' : 'resource unauthorized',
     stacktrace: ''
 });
 
