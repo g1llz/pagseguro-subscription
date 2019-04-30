@@ -42,7 +42,8 @@ const errorHandler = (err, msg, rejectFn) => {
             attachments: [
                 {
                     fields: [
-                        { title: 'MESSAGE', value: JSON.stringify(err.message), short: false },
+                        { title: 'STATUS', value: status, short: false },
+                        { title: 'MESSAGE', value: err.message, short: false },
                         { title: 'STACKTRACE', value: err.stacktrace, short: false }
                     ]
                 }
