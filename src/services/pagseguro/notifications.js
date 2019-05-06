@@ -43,6 +43,7 @@ const notification = deps => {
                             headers: { 'Content-Type': 'application/json;charset=ISO-8859-1' },
                             method: 'POST',
                             body: {
+                                /*  mount an object that contains the PAGSEGURO response */
                                 response: {
                                     type: type,
                                     date: respRef.date,
