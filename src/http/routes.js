@@ -1,5 +1,6 @@
 const db = require('../services/mysql');
 const pg = require('../services/pagseguro');
+const checkData = require('../services/helpers/check-data');
 
 const routes = (server) => {
     server.get('/api/v1', (req, res, next) => {
@@ -30,11 +31,16 @@ const routes = (server) => {
 
     server.post('/api/v1/plan/create', async (req, res, next) => {
         const { plan } = req.body;
-        try {
-            res.json(await pg.plan().create(plan));
-        } catch (error) {
-            res.status(error.status);
-            res.json(error);
+        if (checkData('planSchema', plan)) {
+            try {
+                res.json(await pg.plan().create(plan));
+            } catch (error) {
+                res.status(error.status);
+                res.json(error);
+            }
+        } else {
+           res.status(400);
+           res.json({ error: 'Please check the data sent.'}); 
         }
         next();
     });
