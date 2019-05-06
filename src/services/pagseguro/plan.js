@@ -14,11 +14,27 @@ const plan = deps => {
     const { errorHandler, notFoundOrUnauthorized } = deps;
     return {
         /*   @params
-         *   access documentation --'
+         *   plan: an object that contains all the required information to create a new plan;
+         *   ** read more in documentation;
          */
         create: (plan) => {
             options.uri = `${APIURL}/pre-approvals/request`;
-            options.body = plan;
+            options.body = {
+                /*  mount the object that will be sent to the PAGSEGURO */
+                reference: plan.reference,
+                preApproval: {
+                    name: plan.planName,
+                    charge: "AUTO",
+                    period: "MONTHLY",
+                    amountPerPayment: plan.amountPerPayment.toFixed(2),
+                    trialPeriodDuration: plan.trialPeriodDuration,
+                    expiration: {
+                        value: plan.expirationMonths,
+                        unit: "MONTHS"
+                    },
+                    details: plan.planDetails
+                }
+            };
             options.method = 'POST';
             return new Promise((resolve, reject) => {
                 request(options)
