@@ -6,7 +6,7 @@ NOTE: The documentation is a **work in progress**.
 
 ### **Install**
 
-+ npm i to get dependences
++ **npm i** to get dependences
 + copy and rename **.env.example** to **.env**, and put your configs..
 + create a user in your DB. (necessary to the get token)
 + finally, **npm run dev** to go!
