@@ -1,6 +1,7 @@
 const request = require('request-promise');
 const convert = require('xml-js');
 const xml2Opt = require('../helpers/remove-text-attribute');
+const { checkAndMountCustomer } = require('../helpers/check-data');
 
 const APIURL = process.env.PAG_URL;
 
@@ -18,7 +19,7 @@ const subscription = deps => {
          */
         new: (customer) => {
             options.uri = `${APIURL}/pre-approvals`;
-            options.body = customer;
+            options.body = checkAndMountCustomer(customer);
             options.method = 'POST';
             return new Promise((resolve, reject) => {
                 request(options)
@@ -40,11 +41,15 @@ const subscription = deps => {
         },
         /*   @params
          *   code: 22D09B366D6D5B955461BF9BF6C77F31
-         *   discount: { type: DISCOUNT_PERCENT, value: 10.33 }
+         *   discount: { type: "DISCOUNT_PERCENT", value: "10.33" }
          */
-        discountInNextOrder: (code, discount) => {
-            options.uri = `${APIURL}/pre-approvals/${code}/discount`;
-            options.body = discount;
+        discountInNextOrder: (discount) => {
+            options.uri = `${APIURL}/pre-approvals/${discount.code}/discount`;
+            options.body = {
+                /*  mount the object that will be sent to the PAGSEGURO */
+                type: 'DISCOUNT_PERCENT',
+                value: discount.value.toFixed(2)
+            };
             options.method = 'PUT';
             return new Promise((resolve, reject) => {
                 request(options)
