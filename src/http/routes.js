@@ -1,6 +1,6 @@
 const db = require('../services/mysql');
 const pg = require('../services/pagseguro');
-const checkData = require('../services/helpers/check-data');
+const { checkDataBasedOnSchema } = require('../services/helpers/check-data');
 
 const routes = (server) => {
     server.get('/api/v1', (req, res, next) => {
@@ -31,7 +31,7 @@ const routes = (server) => {
 
     server.post('/api/v1/plan/create', async (req, res, next) => {
         const { plan } = req.body;
-        if (checkData('planSchema', plan)) {
+        if (checkDataBasedOnSchema('planSchema', plan)) {
             try {
                 res.json(await pg.plan().create(plan));
             } catch (error) {
@@ -40,18 +40,23 @@ const routes = (server) => {
             }
         } else {
            res.status(400);
-           res.json({ error: 'Please check the data sent.'}); 
+           res.json({ error: 'please check the data sent.'}); 
         }
         next();
     });
 
     server.post('/api/v1/subscription/new', async (req, res, next) => {
         const { customer } = req.body;
-        try {
-            res.json(await pg.subscription().new(customer));
-        } catch (error) {
-            res.status(error.status);
-            res.json(error);
+        if (checkDataBasedOnSchema('customerSchema', customer)) {
+            try {
+                res.json(await pg.subscription().new(customer));
+            } catch (error) {
+                res.status(error.status);
+                res.json(error);
+            }
+        } else {
+            res.status(400);
+            res.json({ error: 'please check the data sent.'}); 
         }
         next();
     });
@@ -79,12 +84,17 @@ const routes = (server) => {
     });
 
     server.post('/api/v1/subscription/order-discount', async (req, res, next) => {
-        const { code, discount } = req.body;
-        try {
-            res.json(await pg.subscription().discountInNextOrder(code, discount));
-        } catch (error) {
-            res.status(error.status);
-            res.json(error);
+        const { discount } = req.body;
+        if (checkDataBasedOnSchema('discountSchema', discount)) {
+            try {
+                res.json(await pg.subscription().discountInNextOrder(discount));
+            } catch (error) {
+                res.status(error.status);
+                res.json(error);
+            }
+        } else {
+            res.status(400);
+            res.json({ error: 'please check the data sent.'});
         }
         next();
     });
