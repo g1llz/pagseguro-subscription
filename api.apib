@@ -103,7 +103,30 @@ Use to subscribe to a plan.
 
     + Body      
 
-            { // coming soon... }    
+            { 
+                "customer": {
+                    "planCode": "4989E778E4E4315BB4F37F9CAF05D094", // signature code
+                    "paymentHash": "ABCDZZZZXXX#$NJksaEadsQW...", // payment hash
+                    "senderName": "Bruce Wayne",
+                    "senderEmail": "batman@gotham.com",
+                    "senderPhoneArea": "11",
+                    "senderPhoneNumber": "991234567",
+                    "senderAddrStreet": "Rua São José dos Campos",
+                    "senderAddrNumber": "123",
+                    "senderAddrComplement": "", // optional
+                    "senderAddrDistrict": "Centro",
+                    "senderAddrCity": "Gotham",
+                    "senderAddrState": "MG",
+                    "senderAddrPostalCode": "38401084",
+                    "senderCPF": "12345678930",
+                    "holderName": "Bruce Wayne",
+                    "holderBirthDate": "01/04/1986", // the customer shall have +18 
+                    "holderCPF": "12345678930",
+                    "holderPhoneArea": "11",
+                    "holderPhoneNumber": "991234567",
+                    "creditCardToken": "da#@s7687da6s8.&&7d6as87d%AS..." // card token
+                }
+            }    
 
 + Response 200 (application/json)
 
@@ -152,10 +175,9 @@ Use to subscribe to a plan.
     + Body
 
             {
-                "code": "4989E778E4E4315BB4F37F9CAF05D094", // signature code
                 "discount": {
-                "type": "DISCOUNT_PERCENT",
-                "value": 10.00
+                    "code": "4989E778E4E4315BB4F37F9CAF05D094", // signature code
+                    "value": 10, // the value is the same that 10%
                 }
             }
 
