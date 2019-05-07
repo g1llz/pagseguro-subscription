@@ -1,6 +1,8 @@
+const crypto = require('crypto');
+const { normalizeDiacritics } = require('normalize-text');
 const schemas = require('../schemas');
 
-const checkData = (schemaName, data) => {
+const checkDataBasedOnSchema = (schemaName, data) => {
 	const schema = schemas[schemaName];
 	return Object.keys(schema).every(key => {
 		console.log(key);
@@ -12,7 +14,64 @@ const checkData = (schemaName, data) => {
 		}
 		return false;
 	})
-
 }
 
-module.exports = checkData;
+const checkAndMountCustomer = (customer) => {
+	return {
+		plan: customer.planCode,
+		reference: crypto.randomBytes(10).toString('hex'),
+		sender: {
+			name: normalizeDiacritics(customer.senderName),
+			email: customer.senderEmail,
+			hash: customer.paymentHash,
+			phone: {
+				areaCode: customer.senderPhoneArea,
+				number: customer.senderPhoneNumber
+			},
+			address: {
+				street: normalizeDiacritics(customer.senderAddrStreet),
+				number: customer.senderAddrNumber,
+				complement: normalizeDiacritics(customer.senderAddrComplement),
+				district: normalizeDiacritics(customer.senderAddrDistrict),
+				city: normalizeDiacritics(customer.senderAddrCity),
+				state: customer.senderAddrState,
+				country: 'BRA',
+				postalCode: customer.senderAddrPostalCode
+			},
+			documents: [{
+				type: 'CPF',
+				value: customer.senderCPF
+			}]
+		},
+		paymentMethod: {
+			type: 'CREDITCARD',
+			creditCard: {
+				token: customer.creditCardToken,
+				holder: {
+					name: normalizeDiacritics(customer.holderName),
+					birthDate: customer.holderBirthDate,
+					documents: [{
+						type: 'CPF',
+						value: customer.holderCPF
+					}],
+					phone: {
+						areaCode: customer.holderPhoneArea,
+						number: customer.holderPhoneNumber
+					},
+					billingAddress: {
+						street: normalizeDiacritics(customer.senderAddrStreet),
+						number: customer.senderAddrNumber,
+						complement: normalizeDiacritics(customer.senderAddrComplement),
+						district: normalizeDiacritics(customer.senderAddrDistrict),
+						city: normalizeDiacritics(customer.senderAddrCity),
+						state: customer.senderAddrState,
+						country: 'BRA',
+						postalCode: customer.senderAddrPostalCode
+					}
+				}
+			}
+		}
+	}
+}
+
+module.exports = { checkDataBasedOnSchema, checkAndMountCustomer };
