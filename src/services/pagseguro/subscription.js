@@ -40,7 +40,7 @@ const subscription = deps => {
             });
         },
         /*   @params
-         *   code: 22D09B366D6D5B955461BF9BF6C77F31
+         *   code: e.g: 22D09B366D6D5B955461BF9BF6C77F31
          *   discount: { type: "DISCOUNT_PERCENT", value: "10.33" }
          */
         discountInNextOrder: (discount) => {
@@ -48,6 +48,7 @@ const subscription = deps => {
             options.body = {
                 /*  mount the object that will be sent to the PAGSEGURO */
                 type: 'DISCOUNT_PERCENT',
+                /* PAGSEGURO requires "value" as a string with two decimal places after the dot. */
                 value: discount.value.toFixed(2)
             };
             options.method = 'PUT';
@@ -68,7 +69,7 @@ const subscription = deps => {
             });
         },
         /*   @params
-         *   code: 22D09B366D6D5B955461BF9BF6C77F31
+         *   code: e.g: 22D09B366D6D5B955461BF9BF6C77F31
          */
         ordersByApprovalCode: (code) => {
             options.uri = `${APIURL}/pre-approvals/${code}/payment-orders`;
@@ -90,7 +91,7 @@ const subscription = deps => {
             });
         },
         /*   @params
-         *   code: 22D09B366D6D5B955461BF9BF6C77F31
+         *   code: e.g: 22D09B366D6D5B955461BF9BF6C77F31
          */
         signatureDetailByApprovalCode: (code) => {
             options.uri = `${APIURL}/pre-approvals/${code}`;
@@ -112,7 +113,7 @@ const subscription = deps => {
             });
         },
         /*   @params
-         *   code: 22D09B366D6D5B955461BF9BF6C77F31
+         *   code: e.g: 22D09B366D6D5B955461BF9BF6C77F31
          */
         cancel: (code) => {
             options.uri = `${APIURL}/pre-approvals/${code}/cancel`;

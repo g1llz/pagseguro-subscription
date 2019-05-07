@@ -24,13 +24,13 @@ const plan = deps => {
                 reference: plan.reference,
                 preApproval: {
                     name: plan.planName,
-                    charge: "AUTO",
-                    period: "MONTHLY",
+                    charge: 'AUTO',
+                    period: 'MONTHLY',
                     amountPerPayment: plan.amountPerPayment.toFixed(2),
                     trialPeriodDuration: plan.trialPeriodDuration,
                     expiration: {
                         value: plan.expirationMonths,
-                        unit: "MONTHS"
+                        unit: 'MONTHS'
                     },
                     details: plan.planDetails
                 }
