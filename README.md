@@ -1,4 +1,4 @@
-# PAGSEGURO-Subscription
+# PAGSEGURO Subscription
 This API implements the recurring payment of [PAGSEGURO](https://dev.pagseguro.uol.com.br/docs/pagamento-recorrente). Every contribution is welcome :ok_hand:
 
 NOTE: The documentation is a **work in progress**.
@@ -50,10 +50,10 @@ USE_SLACK=true
 
 **DB config**
 ```js
-MYSQL_host=
-MYSQL_user=
-MYSQL_password=
-MYSQL_database=
+MYSQL_HOST=
+MYSQL_USER=
+MYSQL_PASSWORD=
+MYSQL_DATABASE=
 ```
 
 
@@ -77,10 +77,10 @@ apps: [{
             JWT_SECRET: 'XXXXXX',
             PORT: 3003,
             MY_SLACK_WEBHOOK_URL: 'XXXXXX',
-            MYSQL_host: 'XXXXXX',
-            MYSQL_user: 'XXXXXX',
-            MYSQL_password: 'XXXXXX',
-            MYSQL_database: 'XXXXXX'
+            MYSQL_HOST: 'XXXXXX',
+            MYSQL_USER: 'XXXXXX',
+            MYSQL_PASSWORD: 'XXXXXX',
+            MYSQL_DATABASE: 'XXXXXX'
         }
     }]
 ```
