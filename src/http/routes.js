@@ -39,8 +39,8 @@ const routes = (server) => {
                 res.json(error);
             }
         } else {
-           res.status(400);
-           res.json({ error: 'please check the data sent.'}); 
+            res.status(400);
+            res.json({ error: 'please check the data sent.' });
         }
         next();
     });
@@ -56,7 +56,7 @@ const routes = (server) => {
             }
         } else {
             res.status(400);
-            res.json({ error: 'please check the data sent.'}); 
+            res.json({ error: 'please check the data sent.' });
         }
         next();
     });
@@ -94,7 +94,7 @@ const routes = (server) => {
             }
         } else {
             res.status(400);
-            res.json({ error: 'please check the data sent.'});
+            res.json({ error: 'please check the data sent.' });
         }
         next();
     });
