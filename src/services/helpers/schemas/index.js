@@ -1,3 +1,4 @@
+/* rules to create an object */
 const schemas = {
 	planSchema: {
 		reference: { type: String, required: true	},
