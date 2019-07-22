@@ -1,4 +1,4 @@
-# PAGSEGURO Subscription
+# PAGSEGURO Subscription (discontinued)
 This API implements the recurring payment of [PAGSEGURO](https://dev.pagseguro.uol.com.br/docs/pagamento-recorrente). Every contribution is welcome :ok_hand:
 
 NOTE: The documentation is a **work in progress**.
